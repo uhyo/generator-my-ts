@@ -160,26 +160,30 @@ return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
     builder.addConstant('BUNDLE_MODULE_NAME', this.options.bundlemodule);
     builder.addConstant('BUNDLE_NAME', 'bundle.js');
 
-    const block = builder.addTaskBlock('Rollup', `let rollupCache;`);
+    const block = builder.addTaskBlock('Rollup', `
+let rollupCache;
+function runRollup(){
+  return rollupStream({
+    entry: path.join(TS_DIST_LIB, 'index.js'),
+    format: 'umd',
+    moduleName: BUNDLE_MODULE_NAME,
+    sourceMap: 'inline',
+    rollup,
+    cache: rollupCache,
+  })
+  .on('bundle', bundle=> rollupCache = bundle)
+  .pipe(source(BUNDLE_NAME))
+  .pipe(gulp.dest(DIST_LIB));
+}
+`);
+    block.addTask('bundle-main', {}, ` return runRollup();`);
     block.addTask('bundle', {
       dependencies: ['tsc'],
       default: true,
-    }, `
-return rollupStream({
-  entry: path.join(TS_DIST_LIB, 'index.js'),
-  format: 'umd',
-  moduleName: BUNDLE_MODULE_NAME,
-  sourceMap: 'inline',
-  rollup,
-  cache: rollupCache,
-})
-.on('bundle', bundle=> rollupCache = bundle)
-.pipe(source(BUNDLE_NAME))
-.pipe(gulp.dest(DIST_LIB))
-`);
+    }, `return runRollup();`);
     block.addTask('watch-bundle', {
       dependencies: ['bundle'],
       watch: true,
-    }, `gulp.watch(path.join(TS_DIST_LIB, '**', '*.js'), ['bundle']);`);
+    }, `gulp.watch(path.join(TS_DIST_LIB, '**', '*.js'), ['bundle-main']);`);
   }
 };
