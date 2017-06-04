@@ -66,6 +66,30 @@ module.exports = class extends Generator {
     });
   }
   writing() {
+    let lib = ['dom'];
+    // targetに応じてlibを構成
+    switch (this.props.target){
+      case 'es5': {
+        lib.push('es5');
+        break;
+      }
+      case 'es2015': {
+        lib.push('es2015', 'dom.iterable');
+        break;
+      }
+      case 'es2016': {
+        lib.push('es2016', 'dom.iterable');
+        break;
+      }
+      case 'es2017': {
+        lib.push('es2017', 'dom.iterable');
+        break;
+      }
+      case 'esnext': {
+        lib.push('esnext', 'dom.iterable');
+        break;
+      }
+    }
     // Write tsconfig.json
     const tsconfig = this.fs.readJSON(this.templatePath('tsconfig.json'));
     Object.assign(tsconfig.compilerOptions, {
@@ -91,10 +115,12 @@ module.exports = class extends Generator {
     if (!this.fs.exists(editorconfig)) {
       this.fs.write(editorconfig, '');
     }
-    this.fs.append(editorconfig, `[*.{ts,tsx}]
+    if (!/^\[\*\.\{ts,tsx\}\]$/m.test(this.fs.read(editorconfig))){
+      this.fs.append(editorconfig, `[*.{ts,tsx}]
 indent_style = space
-indent_size = 2
+indent_size = 4
 `);
+    }
   }
 };
 

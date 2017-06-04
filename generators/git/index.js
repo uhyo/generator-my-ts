@@ -25,14 +25,24 @@ module.exports = class extends Generator {
       required: this.option.declaration,
       message: 'Path of declartion directory'
     });
+    this.option('distinterm', {
+      type: String,
+      required: false,
+      message: 'Intermediate code directory',
+    });
   }
   writing() {
     // Write .gitignore
-    const content = `
+    let content = `
 # Distribution files
 ${this.options.dist}
-${this.options.declaration ? this.options.declarationdir : ''}
 `;
+    if (this.options.distinterm){
+      content += `${this.options.distinterm}\n`;
+    }
+    if (this.options.declaration){
+      content += `${this.options.declarationdir}\n`;
+    }
     const gitignore = this.destinationPath('.gitignore');
     if (this.fs.exists(gitignore)) {
       const c = this.fs.read(gitignore);

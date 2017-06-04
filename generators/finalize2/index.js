@@ -15,9 +15,11 @@ module.exports = class extends Generator {
     Object.assign(current, {
       eslintConfig: undefined
     });
-    Object.assign(current.scripts, {
-      pretest: undefined
-    });
+    if (current.scripts){
+      Object.assign(current.scripts, {
+        pretest: undefined
+      });
+    }
     this.fs.writeJSON(packagejson, current);
   }
 };
