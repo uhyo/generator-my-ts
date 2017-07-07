@@ -101,6 +101,7 @@ const ${c.name} = ${c.value};
         gulpfile += `const ${c.name} = ${c.value};\n`;
       }
     }
+    gulpfile += `const PRODUCTION = process.env.NODE_ENV === 'production';\n`;
     gulpfile += '\n';
     // memo tasks
     const defaultTasks = [];

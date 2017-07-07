@@ -156,6 +156,7 @@ return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
     builder.addModule('rollup-stream', 'rollupStream');
     builder.addModule('vinyl-source-stream', 'source');
     builder.addModule('vinyl-buffer', 'buffer');
+    builder.addModule('gulp-uglify', 'uglify');
 
     builder.addConstant('BUNDLE_MODULE_NAME', this.options.bundlemodule);
     builder.addConstant('BUNDLE_NAME', 'bundle.js');
@@ -163,7 +164,7 @@ return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
     const block = builder.addTaskBlock('Rollup', `
 let rollupCache;
 function runRollup(){
-  return rollupStream({
+  let main = rollupStream({
     entry: path.join(TS_DIST_LIB, 'index.js'),
     format: 'umd',
     moduleName: BUNDLE_MODULE_NAME,
@@ -172,8 +173,13 @@ function runRollup(){
     cache: rollupCache,
   })
   .on('bundle', bundle=> rollupCache = bundle)
-  .pipe(source(BUNDLE_NAME))
-  .pipe(gulp.dest(DIST_LIB));
+  .pipe(source(BUNDLE_NAME));
+
+  if (PRODUCTION){
+    main = main.pipe(buffer()).pipe(uglify());
+  }
+
+  return main.pipe(gulp.dest(DIST_LIB));
 }
 `);
     block.addTask('bundle-main', {}, ` return runRollup();`);
