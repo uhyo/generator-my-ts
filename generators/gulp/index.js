@@ -165,12 +165,15 @@ return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
 let rollupCache;
 function runRollup(){
   let main = rollupStream({
-    entry: path.join(TS_DIST_LIB, 'index.js'),
-    format: 'umd',
-    moduleName: BUNDLE_MODULE_NAME,
-    sourceMap: 'inline',
-    rollup,
+    // inputOptions
+    input: path.join(TS_DIST_LIB, 'index.js'),
     cache: rollupCache,
+    // outputOptions
+    format: 'umd',
+    name: BUNDLE_MODULE_NAME,
+    sourcemap: 'inline',
+    // rollup-stream specific
+    rollup,
   })
   .on('bundle', bundle=> rollupCache = bundle)
   .pipe(source(BUNDLE_NAME));
