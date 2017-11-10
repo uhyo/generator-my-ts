@@ -156,7 +156,8 @@ return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
     builder.addModule('rollup-stream', 'rollupStream');
     builder.addModule('vinyl-source-stream', 'source');
     builder.addModule('vinyl-buffer', 'buffer');
-    builder.addModule('gulp-uglify', 'uglify');
+    builder.addModule('gulp-uglify/composer', 'uglifyComposer');
+    builder.addModule('uglify-es', 'uglifyEs');
 
     builder.addConstant('BUNDLE_MODULE_NAME', this.options.bundlemodule);
     builder.addConstant('BUNDLE_NAME', 'bundle.js');
@@ -179,7 +180,7 @@ function runRollup(){
   .pipe(source(BUNDLE_NAME));
 
   if (PRODUCTION){
-    main = main.pipe(buffer()).pipe(uglify());
+    main = main.pipe(buffer()).pipe(uglifyComposer(uglifyEs, console)());
   }
 
   return main.pipe(gulp.dest(DIST_LIB));

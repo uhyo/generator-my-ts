@@ -66,7 +66,7 @@ module.exports = class extends Generator {
     });
   }
   writing() {
-    let lib = ['dom'];
+    const lib = ['dom'];
     // targetに応じてlibを構成
     switch (this.props.target){
       case 'es5': {
@@ -96,6 +96,7 @@ module.exports = class extends Generator {
       declaration: this.props.declaration,
       module: this.props.module,
       target: this.props.target
+      lib,
     });
     Object.assign(tsconfig, {
       include: [
