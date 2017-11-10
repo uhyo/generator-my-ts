@@ -95,7 +95,7 @@ module.exports = class extends Generator {
     Object.assign(tsconfig.compilerOptions, {
       declaration: this.props.declaration,
       module: this.props.module,
-      target: this.props.target
+      target: this.props.target,
       lib,
     });
     Object.assign(tsconfig, {
