@@ -137,9 +137,11 @@ if (DIST_DECLARATION){
     }, `
 return gulp.src(path.join(LIB_DIR, '**', '*.ts{,x}'))
 .pipe(gulpTSlint({
-  formatter: 'verbose',
+  formatter: 'stylish',
 }))
-.pipe(gulpTSlint.report());
+.pipe(gulpTSlint.report({
+  emitError: false,
+}));
 `);
     block.addTask('watch-tslint', {
       dependencies: ['tslint'],
