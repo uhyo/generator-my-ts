@@ -7,13 +7,19 @@ module.exports = class extends Generator {
     this.fs.delete(this.destinationPath('.eslintignore'));
     const packagejson = this.destinationPath('package.json');
     const current = this.fs.readJSON(packagejson);
-    current.devDependencies.eslint = undefined;
     Object.assign(current.devDependencies, {
       eslint: undefined,
-      'eslint-config-xo-space': undefined
+      'eslint-config-prettier': undefined,
+      'eslint-config-xo-space': undefined,
+      'eslint-plugin-prettier': undefined,
     });
     Object.assign(current, {
-      eslintConfig: undefined
+      eslintConfig: undefined,
+      'lint-staged': {
+        '*.ts': ['tslint --fix', 'git add'],
+        '*.tsx': ['tslint --fix', 'git add'],
+        '*.json': ['prettier --write', 'git add'],
+      },
     });
     if (current.scripts){
       Object.assign(current.scripts, {

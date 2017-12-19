@@ -14,6 +14,7 @@
         ],
         "no-angle-bracket-type-assertion": true,
         "no-arg": true,
+        "no-console": false,
         "no-duplicate-variable": true,
         "no-empty": true,
         "no-eval": true,
