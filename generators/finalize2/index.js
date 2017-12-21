@@ -10,7 +10,7 @@ module.exports = class extends Generator {
     Object.assign(current.devDependencies, {
       eslint: undefined,
       'eslint-config-prettier': undefined,
-      'eslint-config-xo-space': undefined,
+      'eslint-config-xo': undefined,
       'eslint-plugin-prettier': undefined,
     });
     Object.assign(current, {
