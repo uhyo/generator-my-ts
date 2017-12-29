@@ -20,6 +20,16 @@ module.exports = class extends Generator {
         '*.tsx': ['tslint --fix', 'git add'],
         '*.json': ['prettier --write', 'git add'],
       },
+      jest: {
+        collectCoverage: true,
+        mapCoverage: true,
+        testEnvironment: 'node',
+        transform: {
+          '^.+\\.tsx?$': 'ts-jest',
+        },
+        testRegex: 'lib(?:/.+)?/__tests__/.*\\.ts$',
+        moduleFileExtensions: ['js', 'ts'],
+      },
     });
     if (current.scripts){
       Object.assign(current.scripts, {
