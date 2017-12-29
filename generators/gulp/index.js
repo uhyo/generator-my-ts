@@ -53,6 +53,8 @@ module.exports = class extends Generator {
 
     if (this.options.bundle === 'rollup'){
       this._rollup(builder);
+    } else if (this.options.bundle === 'webpack'){
+      this._webpack(builder);
     }
 
     this._finalize(builder);
@@ -197,5 +199,70 @@ function runRollup(){
       dependencies: ['bundle'],
       watch: true,
     }, `gulp.watch(path.join(TS_DIST_LIB, '**', '*.js'), ['bundle-main']);`);
+  }
+  /**
+   * Register Webpack features.
+   */
+  _webpack(builder){
+    // copy webpack.config.js
+    const p = this.destinationPath('webpack.config.js');
+    const from = this.templatePath('webpack.config.js');
+    this.fs.copy(from, p);
+
+    builder.addPkg('package-webpack.json');
+    builder.addModuleSeparator('Webpack');
+    builder.addModule('webpack');
+
+    builder.addConstant('BUNDLE_NAME', 'bundle.js');
+
+    const block = builder.addTaskBlock('Webpack', `
+function runWebpack(watch){
+  const config = Object.assign(
+    {},
+    require('./webpack.config.js'),
+    {
+      entry: path.join(__dirname, TS_DIST_LIB, 'index.js'),
+      output: {
+        path: path.join(__dirname, DIST_LIB),
+        filename: BUNDLE_NAME,
+      },
+    }
+  );
+  const compiler = webpack(config);
+  const handleStats = (stats, watch)=>{
+    console.log(stats.toString({
+      chunks: !watch,
+      colors: true,
+    }));
+  };
+  if (watch){
+    return compiler.watch({
+    }, (err, stats)=>{
+      if (err){
+        console.error(err);
+      } else {
+        handleStats(stats, true);
+      }
+    });
+  } else {
+    return compiler.run((err, stats)=>{
+      if (err){
+        console.error(err);
+      } else {
+        handleStats(stats, false);
+      }
+    });
+  }
+}
+`);
+    block.addTask('bundle-main', {}, `return runWebpack(false);`);
+    block.addTask('bundle', {
+      dependencies: ['tsc'],
+      default: true,
+    }, `return runWebpack(false);`);
+    block.addTask('watch-bundle', {
+      dependencies: ['bundle'],
+      watch: true,
+    }, `return runWebpack(true);`);
   }
 };

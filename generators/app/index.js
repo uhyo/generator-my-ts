@@ -46,7 +46,7 @@ module.exports = class extends Generator {
       type: 'list',
       name: 'bundle',
       message: 'Bundler',
-      choices: ['none',/* 'webpack',*/ 'rollup'],
+      choices: ['none', 'webpack','rollup'],
       default: 'none',
       save: true,
     }, {

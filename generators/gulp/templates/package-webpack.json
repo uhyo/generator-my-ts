@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "source-map-loader": "^0.2.3",
+    "webpack": "^3.10.0"
+   }
+}
