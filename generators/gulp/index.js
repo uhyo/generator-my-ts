@@ -236,8 +236,7 @@ function runWebpack(watch){
     }));
   };
   if (watch){
-    return compiler.watch({
-    }, (err, stats)=>{
+    return compiler.watch(config.watchOptions, (err, stats)=>{
       if (err){
         console.error(err);
       } else {
@@ -261,7 +260,6 @@ function runWebpack(watch){
       default: true,
     }, `return runWebpack(false);`);
     block.addTask('watch-bundle', {
-      dependencies: ['bundle'],
       watch: true,
     }, `return runWebpack(true);`);
   }
