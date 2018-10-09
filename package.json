@@ -19,10 +19,10 @@
   "devDependencies": {
     "eslint": "^4.13.1",
     "eslint-config-xo-space": "^0.17.0",
-    "generator-node": "^2.3.0",
+    "generator-node": "^2.5.0",
     "jest": "^22.0.0",
-    "jest-cli": "^22.0.0",
-    "nsp": "^3.1.0",
+    "jest-cli": "^22.4.4",
+    "nsp": "^3.2.1",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
   },
@@ -30,7 +30,7 @@
     "chalk": "^2.3.0",
     "extend": "^3.0.1",
     "indent-string": "^3.2.0",
-    "yeoman-generator": "^2.0.1",
+    "yeoman-generator": "^2.0.2",
     "yosay": "^2.0.1"
   },
   "jest": {

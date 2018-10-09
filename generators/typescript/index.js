@@ -50,8 +50,8 @@ module.exports = class extends Generator {
         type: 'list',
         name: 'module',
         message: 'TypeScript module option',
-        default: tsconfig.compilerOptions.module || (({target}) => target === 'es5' ? 'commonjs' : 'es2015'),
-        choices: ['commonjs', 'es2015']
+        default: tsconfig.compilerOptions.module || (({target}) => target === 'es5' ? 'commonjs' : 'esnext'),
+        choices: ['commonjs', 'es2015', 'esnext']
       }
     ]).then(props => {
       this.props = props;
